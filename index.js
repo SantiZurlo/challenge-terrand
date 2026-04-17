@@ -13,9 +13,11 @@ app.get('/', welcome);
 import authRouter from './src/routes/auth.router.js';  
 app.use('/api/auth', authRouter);
 
+import recipesRouter from './src/routes/recipes.router.js';
+app.use('/api/recipes', recipesRouter);
+
 import notFound from './src/middlewares/not-found.js';
 app.use(notFound);
 
 const PORT = process.env.PORT || 3001;
-
 app.listen(PORT, () => console.log(`http://localhost:${PORT}`));
