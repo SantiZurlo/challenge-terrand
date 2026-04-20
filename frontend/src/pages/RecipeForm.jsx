@@ -15,6 +15,8 @@ export default function RecipeForm() {
   const [dragOver, setDragOver] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [aiIngredients, setAiIngredients] = useState("");
+  const [aiLoading, setAiLoading] = useState(false);
 
   useEffect(() => {
     if (isEditing) {
@@ -66,6 +68,24 @@ export default function RecipeForm() {
     }
   };
 
+  const handleAiSuggest = async () => {
+    if (!aiIngredients.trim()) return;
+    setAiLoading(true);
+    setError("");
+    try {
+      const { data } = await api.post("/ai/suggest", { ingredients: aiIngredients });
+      setForm({
+        title: data.title,
+        description: data.description,
+        ingredients: data.ingredients.join(", "),
+      });
+    } catch (err) {
+      setError("Error al generar la receta con IA");
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -96,6 +116,30 @@ export default function RecipeForm() {
   return (
     <div className="page-container">
       <h2>{isEditing ? "Editar receta" : "Nueva receta"}</h2>
+
+      {!isEditing && (
+        <div className="ai-box">
+          <h3>🤖 Generar receta con IA</h3>
+          <p>Escribí los ingredientes que tenés y la IA te sugiere una receta completa.</p>
+          <div className="ai-input-row">
+            <input
+              placeholder="Ej: pollo, limón, ajo, papas"
+              value={aiIngredients}
+              onChange={(e) => setAiIngredients(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleAiSuggest()}
+            />
+            <button
+              type="button"
+              className="btn-ai"
+              onClick={handleAiSuggest}
+              disabled={aiLoading}
+            >
+              {aiLoading ? "Generando..." : "✨ Generar"}
+            </button>
+          </div>
+        </div>
+      )}
+
       <form onSubmit={handleSubmit} className="recipe-form">
         <label>Título</label>
         <input name="title" placeholder="Ej: Milanesa napolitana" value={form.title} onChange={handleChange} required />
@@ -123,7 +167,7 @@ export default function RecipeForm() {
               </button>
             </div>
           ) : (
-            <p>📋 Pegá una imagen (Ctrl+V), arrastrá o <label className="file-label">elegí un archivo<input type="file" accept="image/*" onChange={handleImage} hidden /></label></p>
+            <p>Pegá una imagen (Ctrl+V), arrastrá o <label className="file-label">elegí un archivo<input type="file" accept="image/*" onChange={handleImage} hidden /></label></p>
           )}
         </div>
 

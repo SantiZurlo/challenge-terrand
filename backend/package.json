@@ -1,0 +1,27 @@
+{
+  "name": "challenge-terrand-backend",
+  "version": "1.0.0",
+  "description": "API REST para RecipeApp — Challenge Técnico Terrand",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "author": "Santiago Zurlo",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cloudinary": "^2.9.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "firebase": "^12.6.0",
+    "groq-sdk": "^1.1.2",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^2.1.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
+  }
+}
