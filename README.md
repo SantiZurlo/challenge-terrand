@@ -23,6 +23,7 @@ Aplicación fullstack donde los usuarios pueden registrarse y compartir recetas 
 ---
 
 ## 📁 Estructura del proyecto
+```
 challenge-terrand/
 ├── backend/
 │   ├── src/
@@ -73,6 +74,7 @@ challenge-terrand/
 │   │   └── main.jsx
 │   └── package.json
 └── README.md
+```
 ---
 
 ## ⚙️ Instalación y configuración
