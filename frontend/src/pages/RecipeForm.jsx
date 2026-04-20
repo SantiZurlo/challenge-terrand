@@ -10,6 +10,9 @@ export default function RecipeForm() {
   const [form, setForm] = useState({
     title: "", description: "", ingredients: ""
   });
+  const [image, setImage] = useState(null);
+  const [preview, setPreview] = useState(null);
+  const [dragOver, setDragOver] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -23,6 +26,7 @@ export default function RecipeForm() {
             description: recipe.description,
             ingredients: recipe.ingredients.join(", "),
           });
+          if (recipe.imageUrl) setPreview(recipe.imageUrl);
         }
       });
     }
@@ -32,22 +36,54 @@ export default function RecipeForm() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  const handleImage = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setImage(file);
+    setPreview(URL.createObjectURL(file));
+  };
+
+  const handlePaste = (e) => {
+    const items = e.clipboardData?.items;
+    if (!items) return;
+    for (const item of items) {
+      if (item.type.startsWith("image/")) {
+        const file = item.getAsFile();
+        setImage(file);
+        setPreview(URL.createObjectURL(file));
+        break;
+      }
+    }
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setDragOver(false);
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith("image/")) {
+      setImage(file);
+      setPreview(URL.createObjectURL(file));
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
-    const payload = {
-      title: form.title,
-      description: form.description,
-      ingredients: form.ingredients.split(",").map((i) => i.trim()).filter(Boolean),
-    };
-
     try {
+      const formData = new FormData();
+      formData.append("title", form.title);
+      formData.append("description", form.description);
+      formData.append("ingredients", JSON.stringify(
+        form.ingredients.split(",").map((i) => i.trim()).filter(Boolean)
+      ));
+      if (image) formData.append("image", image);
+
       if (isEditing) {
-        await api.put(`/recipes/${id}`, payload);
+        await api.put(`/recipes/${id}`, formData);
       } else {
-        await api.post("/recipes", payload);
+        await api.post("/recipes", formData);
       }
       navigate("/my-recipes");
     } catch (err) {
@@ -69,6 +105,27 @@ export default function RecipeForm() {
 
         <label>Ingredientes <span className="hint">(separados por coma)</span></label>
         <input name="ingredients" placeholder="Ej: harina, huevo, sal" value={form.ingredients} onChange={handleChange} required />
+
+        <label>Imagen <span className="hint">(opcional)</span></label>
+        <div
+          className={`drop-zone ${dragOver ? "drag-over" : ""}`}
+          onPaste={handlePaste}
+          onDrop={handleDrop}
+          onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+          onDragLeave={() => setDragOver(false)}
+          tabIndex={0}
+        >
+          {preview ? (
+            <div className="preview-container">
+              <img src={preview} alt="Preview" className="image-preview" />
+              <button type="button" className="btn-danger remove-img" onClick={() => { setImage(null); setPreview(null); }}>
+                Quitar imagen
+              </button>
+            </div>
+          ) : (
+            <p>📋 Pegá una imagen (Ctrl+V), arrastrá o <label className="file-label">elegí un archivo<input type="file" accept="image/*" onChange={handleImage} hidden /></label></p>
+          )}
+        </div>
 
         {error && <p className="error">{error}</p>}
         <div className="form-actions">

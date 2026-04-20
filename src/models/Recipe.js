@@ -16,10 +16,18 @@ const generateSlug = (title) => {
 };
 
 //Crear receta
-export const createRecipe = async ({ title, description, ingredients, userId }) => {
+export const createRecipe = async ({ title, description, ingredients, userId, imageUrl }) => {
   const slug = generateSlug(title);
-  const docRef = await addDoc(recipesCollection, {title, description, ingredients, userId, slug, createdAt: new Date().toISOString()});
-  return { id: docRef.id, title, description, ingredients, userId, slug };
+  const docRef = await addDoc(recipesCollection, {
+    title,
+    description,
+    ingredients,
+    userId,
+    slug,
+    imageUrl: imageUrl || null,
+    createdAt: new Date().toISOString()
+  });
+  return { id: docRef.id, title, description, ingredients, userId, slug, imageUrl };
 };
 
 //Obtener recetas de un usuario

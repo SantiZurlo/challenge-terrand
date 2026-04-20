@@ -10,11 +10,14 @@ app.use(express.json());
 import welcome from './src/middlewares/welcome.js';
 app.get('/', welcome);
 
-import authRouter from './src/routes/auth.router.js';  
+import authRouter from './src/routes/auth.router.js';
 app.use('/api/auth', authRouter);
 
 import recipesRouter from './src/routes/recipes.router.js';
 app.use('/api/recipes', recipesRouter);
+
+import ratingsRouter from './src/routes/ratings.router.js';
+app.use('/api/ratings', ratingsRouter);
 
 import notFound from './src/middlewares/not-found.js';
 app.use(notFound);

@@ -1,12 +1,26 @@
 import * as RecipeModel from "../models/Recipe.js";
+import { uploadImage } from "../services/cloudinary.service.js";
 
-// Controladores para recetas
 export const createRecipe = async (req, res) => {
-  try {const { title, description, ingredients } = req.body;
+  try {
+    const { title, description, ingredients } = req.body;
     if (!title || !description || !ingredients) {
       return res.status(400).json({ error: "Título, descripción e ingredientes son obligatorios" });
     }
-    const recipe = await RecipeModel.createRecipe({title, description, ingredients, userId: req.user.id});
+
+    let imageUrl = null;
+    if (req.file) {
+      imageUrl = await uploadImage(req.file.buffer);
+    }
+
+    const recipe = await RecipeModel.createRecipe({
+      title,
+      description,
+      ingredients: JSON.parse(ingredients),
+      userId: req.user.id,
+      imageUrl,
+    });
+
     res.status(201).json(recipe);
   } catch (error) {
     console.error(error);
@@ -14,7 +28,6 @@ export const createRecipe = async (req, res) => {
   }
 };
 
-// Controlador para obtener las recetas del usuario 
 export const getMyRecipes = async (req, res) => {
   try {
     const recipes = await RecipeModel.getRecipesByUser(req.user.id);
@@ -25,7 +38,6 @@ export const getMyRecipes = async (req, res) => {
   }
 };
 
-// Controlador para obtener una receta por su slug (pública)
 export const getRecipeBySlug = async (req, res) => {
   try {
     const recipe = await RecipeModel.getRecipeBySlug(req.params.slug);
@@ -37,7 +49,6 @@ export const getRecipeBySlug = async (req, res) => {
   }
 };
 
-// Controladores para actualizar receta
 export const updateRecipe = async (req, res) => {
   try {
     const recipe = await RecipeModel.getRecipeById(req.params.id);
@@ -45,7 +56,17 @@ export const updateRecipe = async (req, res) => {
     if (recipe.userId !== req.user.id) {
       return res.status(403).json({ error: "No tenés permiso para editar esta receta" });
     }
-    const updated = await RecipeModel.updateRecipe(req.params.id, req.body);
+
+    let imageUrl = recipe.imageUrl || null;
+    if (req.file) {
+      imageUrl = await uploadImage(req.file.buffer);
+    }
+
+    const updated = await RecipeModel.updateRecipe(req.params.id, {
+      ...req.body,
+      ingredients: JSON.parse(req.body.ingredients),
+      imageUrl,
+    });
     res.json(updated);
   } catch (error) {
     console.error(error);
@@ -53,7 +74,6 @@ export const updateRecipe = async (req, res) => {
   }
 };
 
-// Controlador para eliminar receta
 export const deleteRecipe = async (req, res) => {
   try {
     const recipe = await RecipeModel.getRecipeById(req.params.id);

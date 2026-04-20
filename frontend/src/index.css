@@ -197,18 +197,109 @@ input:focus, textarea:focus { border-color: #e85d04; }
 /* PUBLIC RECIPE */
 .public-recipe h1 { font-size: 2rem; margin-bottom: 1rem; }
 .public-recipe h3 { margin: 1.5rem 0 0.8rem; }
+.public-recipe .ingredients-list {
+  flex-direction: column;
+  gap: 4px;
+}
+.public-recipe .ingredients-list li {
+  display: inline-block;
+  width: fit-content;
+}
+
+/* IMAGES */
+.card-image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+.image-preview {
+  width: 100%;
+  max-height: 220px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-top: 0.5rem;
+}
+.public-image {
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+}
+
+/* DROP ZONE */
+.drop-zone {
+  border: 2px dashed #ddd;
+  border-radius: 8px;
+  padding: 1.5rem;
+  text-align: center;
+  color: #888;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  outline: none;
+}
+.drop-zone:focus, .drop-zone.drag-over {
+  border-color: #e85d04;
+  background: #fff8f5;
+}
+.file-label {
+  color: #e85d04;
+  cursor: pointer;
+  font-weight: 500;
+}
+.preview-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.remove-img {
+  font-size: 0.85rem;
+  padding: 6px 12px;
+}
 
 /* MISC */
 .error { color: #d32f2f; font-size: 0.9rem; }
 .loading { text-align: center; margin-top: 3rem; color: #888; }
 .empty { color: #888; text-align: center; margin-top: 2rem; }
 
-.public-recipe .ingredients-list {
-  flex-direction: column;
+/* RATING */
+.rating-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.stars {
+  display: flex;
   gap: 4px;
 }
-
-.public-recipe .ingredients-list li {
-  display: inline-block;
-  width: fit-content;
+.star {
+  font-size: 1.8rem;
+  color: #ddd;
+  transition: color 0.15s;
+  user-select: none;
+}
+.star.filled { color: #f59e0b; }
+.rating-info {
+  font-size: 0.9rem;
+  color: #666;
+}
+.rating-section {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.rating-msg {
+  font-size: 0.9rem;
+  color: #0F6E56;
+  font-weight: 500;
 }

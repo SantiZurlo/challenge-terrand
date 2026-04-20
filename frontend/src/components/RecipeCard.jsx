@@ -1,4 +1,5 @@
- import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
+import RatingStars from "./RatingStars";
 
 export default function RecipeCard({ recipe, onDelete }) {
   const publicUrl = `${window.location.origin}/recipes/${recipe.slug}`;
@@ -10,8 +11,16 @@ export default function RecipeCard({ recipe, onDelete }) {
 
   return (
     <div className="recipe-card">
+      {recipe.imageUrl && (
+        <img src={recipe.imageUrl} alt={recipe.title} className="card-image" />
+      )}
       <h3>{recipe.title}</h3>
       <p className="recipe-description">{recipe.description}</p>
+      <RatingStars
+        average={recipe.rating?.average || 0}
+        total={recipe.rating?.total || 0}
+        readOnly
+      />
       <ul className="ingredients-list">
         {recipe.ingredients.slice(0, 3).map((ing, i) => (
           <li key={i}>{ing}</li>
