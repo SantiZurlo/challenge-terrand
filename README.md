@@ -73,7 +73,9 @@ challenge-terrand/
 │   │   ├── App.jsx
 │   │   └── main.jsx
 │   └── package.json
-└── .env
+└── .gitignore
+└── package-lock.json
+└── package.json
 └── README.md
 ```
 ---
