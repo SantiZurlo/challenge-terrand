@@ -37,6 +37,15 @@ export const getRecipesByUser = async (userId) => {
   return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 };
 
+//Obtener recetas recientes (públicas)
+export const getRecentRecipes = async () => {
+  const snapshot = await getDocs(recipesCollection);
+  const all = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  return all
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    .slice(0, 3);
+};
+
 //Obtener receta por slug (pública)
 export const getRecipeBySlug = async (slug) => {
   const q = query(recipesCollection, where("slug", "==", slug));

@@ -38,6 +38,16 @@ export const getMyRecipes = async (req, res) => {
   }
 };
 
+export const getRecentRecipes = async (req, res) => {
+  try {
+    const recipes = await RecipeModel.getRecentRecipes();
+    res.json(recipes);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error en el servidor" });
+  }
+};
+
 export const getRecipeBySlug = async (req, res) => {
   try {
     const recipe = await RecipeModel.getRecipeBySlug(req.params.slug);

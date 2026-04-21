@@ -12,7 +12,7 @@ export default function Navbar() {
 
   return (
     <nav className="navbar">
-      <Link to="/" className="navbar-brand">🍳 RecipeApp</Link>
+      <Link to="/" className="navbar-brand">🍳 RecetasApp</Link>
       <div className="navbar-links">
         {user ? (
           <>
