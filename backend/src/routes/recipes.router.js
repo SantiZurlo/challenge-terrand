@@ -7,11 +7,11 @@ const router = Router();
 
 // Ruta pública
 router.get("/public/:slug", getRecipeBySlug);
+router.get("/recent", getRecentRecipes);
 
 // Rutas privadas
 router.use(verifyToken);
 router.get("/my-recipes", getMyRecipes);
-router.get("/recent", getRecentRecipes);
 router.post("/", upload.single("image"), createRecipe);
 router.put("/:id", upload.single("image"), updateRecipe);
 router.delete("/:id", deleteRecipe);
