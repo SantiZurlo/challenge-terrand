@@ -2,6 +2,7 @@
 
 Aplicación fullstack donde los usuarios pueden registrarse y compartir recetas de cocina. Construida con Node.js + Express en el backend y React + Vite en el frontend, con Firebase Firestore como base de datos, Cloudinary para imágenes y Groq AI para sugerencias de recetas.
 
+LINK PÚBLICO VERCEL: https://challenge-terrand-git-main-santiago13.vercel.app
 ---
 
 ## Tecnologías utilizadas
